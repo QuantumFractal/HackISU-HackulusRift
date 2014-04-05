@@ -36,7 +36,7 @@ function is_mobile(req) {
 };
  
 function handler (req, res) {
-  //if(is_mobile(req)){
+  if(is_mobile(req)){
 
     fs.readFile(__dirname + '/tablet/index.html', function (err, data) {
       if (err) {
@@ -47,6 +47,18 @@ function handler (req, res) {
       res.writeHead(200);
       res.end(data);
     });
+  }else{
+        fs.readFile(__dirname + '/desktop/index.html', function (err, data) {
+      if (err) {
+        res.writeHead(500);
+        return res.end('Can\'t load desktop html right now :/');
+      }
+ 
+      res.writeHead(200);
+      res.end(data);
+    });
+  }
+
 }
 
 var info, palm, fingers = [];

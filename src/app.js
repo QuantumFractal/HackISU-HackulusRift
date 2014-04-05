@@ -1,4 +1,5 @@
 Leap = require("./node_modules/leapjs/lib/index");
+require("./LeapData");
 
 var S = require('string');
 var app = require('http').createServer(handler)
@@ -6,7 +7,7 @@ var app = require('http').createServer(handler)
 , fs = require('fs')
  
 app.listen(8080);
-
+ 
 var controller = new Leap.Controller();
 
 controller.on('connect', function() {
@@ -21,8 +22,13 @@ controller.on('deviceDisconnected', function() {
   console.log("A Leap device has been disconnected.");
 });
 
+controller.on("frame", function(frame) {
+  ld = new LeapData(frame);
+
+  io.sockets.emit('frame', ld);
+});
+
 controller.connect();
- 
  
 function is_mobile(req) {
   var ua = S(JSON.stringify(req.headers['user-agent']));

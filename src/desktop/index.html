@@ -1,1 +1,22 @@
-You're the desktop!
+<html>
+  <head>
+    <title>Dumper - Leap</title>
+    <meta charset="utf-8">
+    <script src="https://js.leapmotion.com/leap-0.4.3.js"></script>
+    <script src="http://192.168.1.132:8080/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('//192.168.1.132:8080');
+
+      socket.on('frame', function(data) {
+        console.log(data);
+        //latestFrame = frame;
+        //document.getElementById('out').innerHTML = (pausedFrame ? "<p><b>PAUSED</b></p>" : "") + "<div>"+(pausedFrame || latestFrame).dump()+"</div>";
+      });
+
+    </script>
+  </head>
+  <body>
+    <div id="out"></div>
+    <div id="log"></div>
+  </body>
+</html>

@@ -42,14 +42,11 @@
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var container, stats;
-
 			var views, scene, renderer, loader;
-
 			var mesh, group1, group2, group3, light;
-
 			var mouseX = 0, mouseY = 0;
-
 			var windowWidth, windowHeight;
+			var orientation;
 
 			var views = [
 				{
@@ -86,7 +83,21 @@
 
 			var meshes = [];
 
+			// Listen for device movement if available
+			/*if (window.DeviceMotionEvent != undefined) {
+				window.ondevicemotion = function(data) {
+					orientation = data;	
+					document.getElementById("accelerationX").innerHTML = data.accelerationIncludingGravity.x;
+					document.getElementById("accelerationY").innerHTML = data.accelerationIncludingGravity.y;
+					document.getElementById("accelerationZ").innerHTML = data.accelerationIncludingGravity.z;
 
+					if ( data.rotationRate ) {
+						document.getElementById("rotationAlpha").innerHTML = data.rotationRate.alpha;
+						document.getElementById("rotationBeta").innerHTML = data.rotationRate.beta;
+						document.getElementById("rotationGamma").innerHTML = data.rotationRate.gamma;
+					}
+				}
+			} */
 			
 			init();
 			animate();
@@ -260,7 +271,6 @@
 				}
 
 			}
-
 		</script>
 
 	</body>

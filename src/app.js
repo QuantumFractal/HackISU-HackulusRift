@@ -1,5 +1,4 @@
 Leap = require("./node_modules/leapjs/lib/index");
-require("./LeapData");
 
 var S = require('string');
 var app = require('http').createServer(handler)
@@ -23,9 +22,7 @@ controller.on('deviceDisconnected', function() {
 });
 
 controller.on("frame", function(frame) {
-  ld = new LeapData(frame);
-
-  io.sockets.emit('frame', ld);
+  //io.sockets.emit('frame', ld);
 });
 
 controller.connect();

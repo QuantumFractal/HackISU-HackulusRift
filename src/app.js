@@ -58,7 +58,7 @@ function handler (req, res) {
   //if(is_mobile(req)){
     console.log("You're mobile!")
 
-    fs.readFile(__dirname + '/tablet/index_2.html', function (err, data) {
+    fs.readFile(__dirname + '/tablet/index.html', function (err, data) {
       if (err) {
         res.writeHead(500);
         return res.end('Can\'t load headset html right now :/');

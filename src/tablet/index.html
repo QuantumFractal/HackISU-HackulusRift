@@ -46,7 +46,7 @@
 			var mesh, group1, group2, group3, light;
 			var mouseX = 0, mouseY = 0;
 			var windowWidth, windowHeight;
-			//var orientation;
+			var orientation;
 
 			var views = [
 				{
@@ -55,13 +55,13 @@
 					width: 0.5,
 					height: 1.0,
 					background: new THREE.Color().setRGB( 0.5, 0.5, 0.7 ),
-					eye: [ 2, 200, 100],
+					eye: [ -4, 200, 100],
 					up: [ 0, 1, 0 ],
 					fov: 120,
 					updateCamera: function ( camera, scene, mouseX, mouseY ) {
 					  //camera.position.x += mouseX * 0.05;
 					  //camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), -2000 );
-					  camera.lookAt( scene.position );
+					  //camera.lookAt( scene.position );
 					}
 				},
 				{ 
@@ -70,35 +70,45 @@
 					width: 0.5,
 					height: 1.0,
 					background: new THREE.Color().setRGB( 0.5, 0.5, 0.7 ),
-					eye: [ -2, 200, 100],
+					eye: [ 4, 200, 100],
 					up: [ 0, 1, 0 ],
 					fov: 120,
 					updateCamera: function ( camera, scene, mouseX, mouseY ) {
 					 // camera.position.x += mouseX * 0.05;
 					 // camera.position.x = Math.max( Math.min( camera.position.x, 2000 ), -2000 );
-					 camera.lookAt( scene.position );
+					 //camera.lookAt( scene.position );
 					}
 				}
 			];
+			var CameraPos;
+			var LookAt;
+
 
 			var meshes = [];
 			// Listen for device movement if available
-			/*if (window.DeviceMotionEvent != undefined) {
+			if (window.DeviceMotionEvent != undefined) {
 				window.ondevicemotion = function(data) {
-					orientation = data;	
-					document.getElementById("accelerationX").innerHTML = data.accelerationIncludingGravity.x;
-					document.getElementById("accelerationY").innerHTML = data.accelerationIncludingGravity.y;
-					document.getElementById("accelerationZ").innerHTML = data.accelerationIncludingGravity.z;
 
-					if ( data.rotationRate ) {
-						document.getElementById("rotationAlpha").innerHTML = data.rotationRate.alpha;
-						document.getElementById("rotationBeta").innerHTML = data.rotationRate.beta;
-						document.getElementById("rotationGamma").innerHTML = data.rotationRate.gamma;
-					}
+					orientation = data;	
+					var AxisX = new THREE.Vector3(1, 0, 0);
+					var AxisY = new THREE.Vector3(0, 1, 0);
+					var AxisZ = new THREE.Vector3(0, 0, 1);
+
+					RotateVectorAboutVector(LookAt, CameraPos, AxisX, -data.rotationRate.beta / 13); // Pitch
+					RotateVectorAboutVector(LookAt, CameraPos, AxisY, data.rotationRate.alpha / 13); // Yaw
+
+					views[0].camera.lookAt(LookAt);
+					views[1].camera.lookAt(LookAt);
 				}
-			} */
+			} 
 			var renderer, scene, camera, controls, stats;
 			var info, palm, fingers = [];
+
+			function RotateVectorAboutVector(vec, about, axis, angle) {
+				vec.sub(about);
+				vec.applyAxisAngle(axis, angle);
+				vec.add(about);
+			}
 
 			
 			init();
@@ -108,18 +118,32 @@
 
 			container = document.getElementById( 'container' );
 				//Create the views
+				var cx = 0;
+				var cy = 0;
+				var cz = 0;
+
 				for (var ii =  0; ii < views.length; ++ii ) {
 
 					var view = views[ii];
 					camera = new THREE.PerspectiveCamera( view.fov, window.innerWidth / window.innerHeight, 1, 10000 );
 					camera.position.x = view.eye[ 0 ];
+					cx += view.eye[ 0 ];
 					camera.position.y = view.eye[ 1 ];
+					cy += view.eye[ 1 ];
 					camera.position.z = view.eye[ 2 ];
+					cz += view.eye[ 2 ];
 					camera.up.x = view.up[ 0 ];
 					camera.up.y = view.up[ 1 ];
 					camera.up.z = view.up[ 2 ];
 					view.camera = camera;
 				}
+
+				cx = cx / views.length;
+				cy = cy / views.length;
+				cz = cz / views.length;
+
+				CameraPos = new THREE.Vector3(cx, cy, cz);
+				LookAt = new THREE.Vector3(0, 0, 0);
 
 				scene = new THREE.Scene(); 
 				//Setup a light
@@ -301,7 +325,7 @@
 
 				render();
 				
-				palm.rotation.y+= .02;
+				//palm.rotation.y += orientation.rotationRate.alpha * 1000;
 				requestAnimationFrame( animate );
 			}
 

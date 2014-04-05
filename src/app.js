@@ -34,13 +34,6 @@ function is_mobile(req) {
 function handler (req, res) {
   if(is_mobile(req)){
     console.log("You're mobile!")
-    var extname = path.extname(filePath+"/tablet/");
-    var contentTypesByExtention = {
-      'html': 'text/html',
-      'js':   'text/javascript',
-      'css':  'text/css'
-    };
-    var contentType = contentTypesByExtention[extname] || 'text/plain';
 
     fs.readFile(__dirname + '/tablet/index.html', function (err, data) {
       if (err) {

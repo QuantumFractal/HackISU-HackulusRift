@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - multiple views</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -37,6 +36,7 @@
 
 		<script src="js/Detector.js"></script>
 		<script src="js/stats.min.js"></script>
+		<script src="js/ColladaLoader.js"></script>
 
 		<script>
 
@@ -44,7 +44,7 @@
 
 			var container, stats;
 
-			var views, scene, renderer;
+			var views, scene, renderer, loader;
 
 			var mesh, group1, group2, group3, light;
 
@@ -85,12 +85,16 @@
 				}
 			];
 
+			var meshes = [];
+
+
+			
 			init();
 			animate();
 
 			function init() {
 
-				container = document.getElementById( 'container' );
+			container = document.getElementById( 'container' );
 
 				for (var ii =  0; ii < views.length; ++ii ) {
 
@@ -106,6 +110,11 @@
 				}
 
 				scene = new THREE.Scene();
+
+				var object1 = new PinaCollada('set', 1);
+    			scene.add(object1); 
+    			var object2 = new PinaCollada('city', 1);
+    			scene.add(object2); 
 
 				light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 0, 0, 1 );
@@ -199,6 +208,7 @@
 
 				];
 
+				
 				group1 = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
 				group1.position.x = -400;
 				group1.rotation.x = -1.87;
@@ -213,7 +223,7 @@
 				group3.position.x = 0;
 				group3.rotation.x = 0;
 				scene.add( group3 );
-
+			
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -235,6 +245,18 @@
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+			}
+
+			function PinaCollada(modelname, scale) {
+    			var loader = new THREE.ColladaLoader();
+    			var localObject;
+    			loader.options.convertUpAxis = true;
+    			loader.load( 'models/'+modelname+'.dae', function colladaReady( collada ) {
+    	    		localObject = collada.scene;
+        			localObject.scale.x = localObject.scale.y = localObject.scale.z = scale;
+        			localObject.updateMatrix();
+    			} );
+    		return localObject;
 			}
 
 			function onDocumentMouseMove( event ) {
@@ -260,7 +282,7 @@
 			function animate() {
 
 				render();
-				stats.update();
+				
 
 				requestAnimationFrame( animate );
 			}

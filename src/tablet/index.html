@@ -31,6 +31,7 @@
 	<body>
 
 		<div id="container"></div>
+		<script src="192.168.1.105:8080/socket.io/socket.io.js"></script>
 		<script src="https://thomasmoll.co/hackisu/three.js"></script>
 		<script src="http://mrdoob.github.io/three.js/examples/js/controls/TrackballControls.js" ></script>
 		<script src="https://thomasmoll.co/hackisu/Detector.js"></script>
@@ -38,6 +39,10 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
+			var socket = io.connect('http://localhost:8080');
+			socket.on('LeapData', function (data) {
+				console.log(data);
+			});
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
@@ -240,8 +245,8 @@
 				}, 1000 / 60 );
 
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-			}
+				console.log(palm);
+			}	
 
 			function PinaCollada(modelname, scale) {
     			var loader = new THREE.ColladaLoader();

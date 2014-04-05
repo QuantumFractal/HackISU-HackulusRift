@@ -1,9 +1,27 @@
+Leap = require("./node_modules/leapjs/lib/index");
+
 var S = require('string');
 var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)
 , fs = require('fs')
  
 app.listen(8080);
+
+var controller = new Leap.Controller();
+
+controller.on('connect', function() {
+  console.log("Successfully connected.");
+});
+
+controller.on('deviceConnected', function() {
+  console.log("A Leap device has been connected.");
+});
+
+controller.on('deviceDisconnected', function() {
+  console.log("A Leap device has been disconnected.");
+});
+
+controller.connect();
  
  
 function is_mobile(req) {

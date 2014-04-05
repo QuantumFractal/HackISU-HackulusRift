@@ -39,7 +39,7 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
-			var socket = io.connect('http://localhost');
+			var socket = io.connect();
 			socket.on('LeapData', function (data) {
 				console.log(data);
 			});
@@ -87,8 +87,6 @@
 			];
 
 			var meshes = [];
-
-<<<<<<< HEAD
 			// Listen for device movement if available
 			/*if (window.DeviceMotionEvent != undefined) {
 				window.ondevicemotion = function(data) {
@@ -104,10 +102,9 @@
 					}
 				}
 			} */
-=======
 			var renderer, scene, camera, controls, stats;
 			var info, palm, fingers = [];
->>>>>>> FETCH_HEAD
+
 			
 			init();
 			animate();

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head><title>Herpderp</title>
+	<head><title>Hackulus Rift Display</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -30,7 +30,7 @@
 	</head>
 	<body>
 		<div id='container'></div>
-		<script src="https://thomasmoll.co/hackisu/socket.io.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://thomasmoll.co/hackisu/three.js"></script>
 		<script src="http://mrdoob.github.io/three.js/examples/js/controls/TrackballControls.js" ></script>
 		<script src="https://thomasmoll.co/hackisu/Detector.js"></script>
@@ -38,6 +38,12 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
+			var socket = io.connect('http://192.168.1.105:8080');
+
+			socket.on('LeapData', function (data) {
+				console.log("Data REciedsaf");
+			    loadFrame(data);
+			  });
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
@@ -164,13 +170,6 @@
 				context.fillStyle = gradient;
 				context.fillRect( 0, 0, canvas.width, canvas.height );
 
-
-				//Cube
-				cube = new THREE.Mesh( new THREE.CubeGeometry( 50 , 50, 50 ), new THREE.MeshNormalMaterial() );
-				cube.position.y = 150;
-				cube.rotation.z = 1.2;
-				cube.rotation.x = 1;
-
 				// axes
 				scene.add( new THREE.ArrowHelper( v(1, 0, 0), v(0, 0, 0), 30, 0xcc0000) );
 				scene.add( new THREE.ArrowHelper( v(0, 1, 0), v(0, 0, 0), 30, 0x00cc00) );
@@ -191,10 +190,11 @@
 				palm = new THREE.Mesh( geometry, material );
 				palm.castShadow = true;
 				palm.receiveShadow = true;
+				palm.visible = false;
 				scene.add( palm );
 
 				// fingers
-				geometry = new THREE.CubeGeometry( 16, 12, 1 );
+				geometry = new THREE.CubeGeometry( 16, 12, 40 );
 				for (var i = 0; i < 5; i++) {
 				mesh = new THREE.Mesh( geometry, material );
 				mesh.castShadow = true;
@@ -229,30 +229,8 @@
 				container.appendChild( statsL.domElement );
 				container.appendChild( statsR.domElement );
 
-				setInterval( function () {
-
-					var time = Date.now() * 0.001;
-					context.clearRect( 0, 0, 512, 512 );
-
-					statsL.begin();
-					statsR.begin();
-					for ( var i = 0; i < 2000; i ++ ) {
-
-						var x = Math.cos( time + i * 0.01 ) * 196 + 256;
-						var y = Math.sin( time + i * 0.01234 ) * 196 + 256;
-
-						context.beginPath();
-						context.arc( x, y, 10, 0, Math.PI * 2, true );
-						context.fill();
-					}
-
-					statsL.end();
-					statsR.end();
-
-				}, 1000 / 60 );
-
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				console.log(palm);
+
 			}	
 
 			function PinaCollada(modelname, scale) {
@@ -300,8 +278,6 @@
 			function animate() {
 
 				render();
-				
-				palm.rotation.y+= .02;
 				requestAnimationFrame( animate );
 			}
 
@@ -331,6 +307,23 @@
 					renderer.render( scene, camera );
 				}
 
+			}
+
+			function loadFrame(data){
+				for(var i = 0; i<data.fingers.length; i++){
+					fingers[i].position.set(data.fingers[i].position.x,
+											data.fingers[i].position.y,
+											data.fingers[i].position.z);
+
+					fingers[i].rotation.set(data.fingers[i].rotation.x,
+											data.fingers[i].rotation.y,
+											data.fingers[i].rotation.z)
+
+					fingers[i].visible = data.fingers[i].visible;
+				}
+				palm.position.set(data.palm.position.x, data.palm.position.y, data.palm.position.z);
+				palm.rotation.set(data.palm.rotation.x, data.palm.rotation.y, data.palm.rotation.z);
+				palm.visible = data.palm.visible;
 			}
 		</script>
 

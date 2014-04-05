@@ -1,5 +1,4 @@
 Leap = require("./node_modules/leapjs/lib/index");
-//var THREE = require("three.js")
 var S = require('string');
 var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)

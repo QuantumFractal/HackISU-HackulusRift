@@ -38,6 +38,7 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
+			var socket = io.connect('http://192.168.1.132:8080');
 
 			socket.on('LeapData', function (data) {
 			    loadFrame(data);

@@ -55,7 +55,7 @@ function is_mobile(req) {
 };
  
 function handler (req, res) {
-  if(is_mobile(req)){
+  //if(is_mobile(req)){
     console.log("You're mobile!")
 
     fs.readFile(__dirname + '/tablet/index.html', function (err, data) {
@@ -67,19 +67,19 @@ function handler (req, res) {
       res.writeHead(200);
       res.end(data);
     });
-  }
+  //}
  
-  else{
-  fs.readFile(__dirname + '/desktop/index.html', function (err, data) {
-    if (err) {
-      res.writeHead(500);
-    return res.end('Error loading desktop.html! ;-;');
-    }
+  // else{
+  // fs.readFile(__dirname + '/desktop/index.html', function (err, data) {
+  //   if (err) {
+  //     res.writeHead(500);
+  //   return res.end('Error loading desktop.html! ;-;');
+  //   }
  
-    res.writeHead(200);
-    res.end(data);
-  });
-  }
+  //   res.writeHead(200);
+  //   res.end(data);
+  // });
+  // }
 }
 
 

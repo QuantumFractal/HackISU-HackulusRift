@@ -1,5 +1,5 @@
 Leap = require("./node_modules/leapjs/lib/index");
-var THREE = require("./three.js")
+//var THREE = require("three.js")
 var S = require('string');
 var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)
@@ -22,31 +22,31 @@ controller.on('deviceDisconnected', function() {
 });
 
 controller.on("frame", function(frame) {
-  ld = new LeapData(frame);
-
+  //ld = new LeapData(frame);
+  ld = "jffe";
   io.sockets.emit('LeapData', ld);
 });
 
 controller.connect();
 
-var info, palm, fingers = [];
-// palm
-geometry = new THREE.CubeGeometry( 100, 20, 80 );
-material = new THREE.MeshNormalMaterial();
-palm = new THREE.Mesh( geometry, material );
-palm.castShadow = true;
-palm.receiveShadow = true;
-scene.add( palm );
+// var info, palm, fingers = [];
+// // palm
+// geometry = new THREE.CubeGeometry( 100, 20, 80 );
+// material = new THREE.MeshNormalMaterial();
+// palm = new THREE.Mesh( geometry, material );
+// palm.castShadow = true;
+// palm.receiveShadow = true;
+// scene.add( palm );
 
-// fingers
-geometry = new THREE.CubeGeometry( 16, 12, 1 );
-for (var i = 0; i < 5; i++) {
-mesh = new THREE.Mesh( geometry, material );
-mesh.castShadow = true;
-mesh.receiveShadow = true;
-scene.add( mesh );
-fingers.push( mesh );
-}
+// // fingers
+// geometry = new THREE.CubeGeometry( 16, 12, 1 );
+// for (var i = 0; i < 5; i++) {
+// mesh = new THREE.Mesh( geometry, material );
+// mesh.castShadow = true;
+// mesh.receiveShadow = true;
+// scene.add( mesh );
+// fingers.push( mesh );
+// }
 
 function is_mobile(req) {
   var ua = S(JSON.stringify(req.headers['user-agent']));

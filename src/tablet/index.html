@@ -31,7 +31,7 @@
 	<body>
 
 		<div id="container"></div>
-		<script src="192.168.1.105:8080/socket.io/socket.io.js"></script>
+		<script src="https://thomasmoll.co/hackisu/socket.io.js"></script>
 		<script src="https://thomasmoll.co/hackisu/three.js"></script>
 		<script src="http://mrdoob.github.io/three.js/examples/js/controls/TrackballControls.js" ></script>
 		<script src="https://thomasmoll.co/hackisu/Detector.js"></script>
@@ -39,7 +39,7 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
-			var socket = io.connect('http://localhost:8080');
+			var socket = io.connect('http://localhost');
 			socket.on('LeapData', function (data) {
 				console.log(data);
 			});

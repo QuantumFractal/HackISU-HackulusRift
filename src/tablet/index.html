@@ -39,10 +39,6 @@
 		<script src="https://thomasmoll.co/hackisu/ColladaLoader.js"></script>
 
 		<script>
-			var socket = io.connect();
-			socket.on('LeapData', function (data) {
-				console.log(data);
-			});
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
